@@ -205,14 +205,21 @@ main() {
   setup_cli
 
   echo
-  echo -e "${GREEN}  Agento installed successfully!${NC}"
+  echo -e "${GREEN}  ✓ Agento installed successfully!${NC}"
   echo
   echo "  Next steps:"
-  echo "    1. agento init       # Set up admin account"
-  echo "    2. agento start      # Start the platform"
-  echo "    3. agento open       # Open in browser"
   echo
-  echo "  Documentation: https://agento.host/docs/self-hosted"
+  echo -e "    ${BLUE}agento init${NC}        Set up admin email + password"
+  echo -e "    ${BLUE}agento start${NC}       Start orchestrator (:3001) + frontend (:3000)"
+  echo -e "    ${BLUE}agento open${NC}        Open http://localhost:3000 in browser"
+  echo
+  echo "  Other commands:"
+  echo
+  echo -e "    ${BLUE}agento status${NC}      Show running agents + service health"
+  echo -e "    ${BLUE}agento stop${NC}        Stop all services"
+  echo -e "    ${BLUE}agento token${NC}       Print API token"
+  echo
+  echo -e "  Docs: ${BLUE}https://github.com/remsyshq/agento-self-hosted${NC}"
   echo
 }
 
