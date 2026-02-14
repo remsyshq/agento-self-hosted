@@ -1,0 +1,22 @@
+server {
+    listen 80;
+    server_name get.agento.host;
+
+    # Cloudflare handles SSL termination
+
+    location = / {
+        alias /var/www/agento-self-hosted/install.sh;
+        default_type text/plain;
+        add_header Content-Type "text/plain; charset=utf-8";
+    }
+
+    location /health {
+        return 200 'ok';
+        add_header Content-Type text/plain;
+    }
+
+    # Block everything else
+    location / {
+        return 404;
+    }
+}
