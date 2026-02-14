@@ -146,6 +146,10 @@ install_agento() {
 
   cd "$INSTALL_DIR"
 
+  # Clean stale lockfile/modules after update (deps may have changed)
+  rm -f package-lock.json
+  rm -rf node_modules
+
   # Install backend dependencies (need scripts for better-sqlite3 native build)
   info "Installing backend dependencies..."
   npm install || fatal "Failed to install backend dependencies"
