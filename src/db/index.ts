@@ -1,11 +1,11 @@
-import Database from 'better-sqlite3';
+import Database, { type Database as DatabaseType } from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema.js';
 import { getConfig } from '../config.js';
 import { join } from 'path';
 
 let _db: ReturnType<typeof drizzle> | null = null;
-let _sqlite: Database.Database | null = null;
+let _sqlite: DatabaseType | null = null;
 
 export function getDb() {
   if (_db) return _db;
@@ -19,7 +19,7 @@ export function getDb() {
   return _db;
 }
 
-export function getSqlite() {
+export function getSqlite(): DatabaseType {
   if (!_sqlite) getDb();
   return _sqlite!;
 }

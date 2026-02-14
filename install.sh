@@ -152,16 +152,16 @@ install_agento() {
 
   # Install backend dependencies (need scripts for better-sqlite3 native build)
   info "Installing backend dependencies..."
-  npm install || fatal "Failed to install backend dependencies"
+  npm install --no-fund --no-audit --loglevel=error || fatal "Failed to install backend dependencies"
 
   # Build backend
   info "Building backend..."
-  npx tsc || true
+  npx tsc 2>&1 | tail -1 || true
 
   # Install frontend dependencies
   info "Installing frontend dependencies..."
   cd app
-  npm install || fatal "Failed to install frontend dependencies"
+  npm install --no-fund --no-audit --loglevel=error || fatal "Failed to install frontend dependencies"
   cd ..
 
   ok "Dependencies installed"
@@ -185,12 +185,16 @@ SCRIPT
 
   chmod +x "$WRAPPER"
 
-  # Symlink to /usr/local/bin
+  # Symlink to /usr/local/bin (try sudo if needed)
   if [ -w /usr/local/bin ]; then
     ln -sf "$WRAPPER" /usr/local/bin/agento
     ok "CLI installed: agento"
+  elif command -v sudo &>/dev/null; then
+    info "Need sudo to create /usr/local/bin/agento symlink..."
+    sudo ln -sf "$WRAPPER" /usr/local/bin/agento
+    ok "CLI installed: agento"
   else
-    warn "Cannot write to /usr/local/bin. Run with sudo or add $AGENTO_DIR/bin to PATH."
+    warn "Cannot write to /usr/local/bin. Add to PATH manually:"
     info "  export PATH=\"$AGENTO_DIR/bin:\$PATH\""
   fi
 }

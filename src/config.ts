@@ -31,8 +31,8 @@ export function getConfig(): AppConfig {
   }
 
   const raw = readFileSync(configPath, 'utf-8');
-  _config = { ...DEFAULT_CONFIG, ...JSON.parse(raw), dataDir };
-  return _config;
+  _config = { ...DEFAULT_CONFIG, ...JSON.parse(raw), dataDir } as AppConfig;
+  return _config!;
 }
 
 export function saveConfig(config: Partial<AppConfig>) {
