@@ -50,14 +50,30 @@ detect_platform() {
 check_prereqs() {
   info "Checking prerequisites..."
 
-  # Docker
+  # Docker (Docker Desktop, OrbStack, or any Docker-compatible runtime)
   if ! command -v docker &>/dev/null; then
-    fatal "Docker is not installed. Install Docker Desktop: https://docker.com/products/docker-desktop"
+    if [ "$OS" = "macos" ] && [ "$ARCH" = "arm64" ]; then
+      fatal "Docker is not installed. Install one of:\n  OrbStack (recommended): https://orbstack.dev\n  Docker Desktop:         https://docker.com/products/docker-desktop"
+    else
+      fatal "Docker is not installed. Install Docker Desktop: https://docker.com/products/docker-desktop"
+    fi
   fi
   if ! docker info &>/dev/null; then
-    fatal "Docker is not running. Start Docker Desktop and try again."
+    # Detect which runtime is installed
+    DOCKER_RUNTIME="Docker"
+    if [ "$OS" = "macos" ]; then
+      if [ -d "/Applications/OrbStack.app" ]; then
+        DOCKER_RUNTIME="OrbStack"
+      fi
+    fi
+    fatal "$DOCKER_RUNTIME is not running. Start $DOCKER_RUNTIME and try again."
   fi
-  ok "Docker is running"
+  # Show which runtime
+  DOCKER_RUNTIME="Docker"
+  if [ "$OS" = "macos" ] && [ -d "/Applications/OrbStack.app" ]; then
+    DOCKER_RUNTIME="OrbStack"
+  fi
+  ok "$DOCKER_RUNTIME is running ($(docker --version | cut -d' ' -f3 | tr -d ','))"
 
   # Node.js
   if ! command -v node &>/dev/null; then

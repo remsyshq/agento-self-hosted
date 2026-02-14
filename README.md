@@ -13,7 +13,7 @@ agento open
 
 ## Prerequisites
 
-- **Docker Desktop** — running and accessible
+- **Docker** — [OrbStack](https://orbstack.dev) (recommended on Apple Silicon) or Docker Desktop
 - **Node.js 20+** — with npm
 - **macOS** (Apple Silicon) or **Linux** (arm64/amd64)
 
