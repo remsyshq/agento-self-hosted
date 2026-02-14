@@ -108,6 +108,19 @@ check_prereqs() {
     fatal "git is not installed."
   fi
   ok "git available"
+
+  # Build tools (needed for better-sqlite3 native addon)
+  if [ "$OS" = "macos" ]; then
+    if ! xcode-select -p &>/dev/null; then
+      fatal "Xcode Command Line Tools not installed. Run: xcode-select --install"
+    fi
+    ok "Xcode CLI tools available"
+  else
+    if ! command -v make &>/dev/null || ! command -v g++ &>/dev/null; then
+      fatal "Build tools not installed. Run: sudo apt-get install build-essential"
+    fi
+    ok "Build tools available"
+  fi
 }
 
 # ── Install ──────────────────────────────────────────────────────────────────
@@ -135,16 +148,16 @@ install_agento() {
 
   # Install backend dependencies (need scripts for better-sqlite3 native build)
   info "Installing backend dependencies..."
-  npm install 2>/dev/null
+  npm install || fatal "Failed to install backend dependencies"
 
   # Build backend
   info "Building backend..."
-  npx tsc 2>/dev/null || true
+  npx tsc || true
 
   # Install frontend dependencies
   info "Installing frontend dependencies..."
   cd app
-  npm install 2>/dev/null
+  npm install || fatal "Failed to install frontend dependencies"
   cd ..
 
   ok "Dependencies installed"
