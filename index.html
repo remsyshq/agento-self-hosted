@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agento Self-Hosted</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #09090b;
+      color: #fafafa;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      max-width: 600px;
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: #a1a1aa;
+      font-size: 1.05rem;
+      margin-bottom: 2.5rem;
+    }
+    .install-box {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .install-label {
+      font-size: 0.8rem;
+      color: #a1a1aa;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    .install-cmd {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .install-cmd code {
+      flex: 1;
+      font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      font-size: 0.9rem;
+      color: #e4e4e7;
+      word-break: break-all;
+    }
+    .copy-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+    }
+    .copy-btn:hover { opacity: 0.85; }
+    .copy-btn.copied { background: #22c55e; }
+    .steps {
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .steps h3 {
+      font-size: 0.85rem;
+      color: #a1a1aa;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    .step {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: 0.4rem 0;
+    }
+    .step-num {
+      color: #3b82f6;
+      font-weight: 600;
+      font-size: 0.85rem;
+      min-width: 1.25rem;
+    }
+    .step code {
+      font-family: ui-monospace, 'SF Mono', Monaco, monospace;
+      font-size: 0.85rem;
+      background: #27272a;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.25rem;
+      color: #e4e4e7;
+    }
+    .step span {
+      color: #a1a1aa;
+      font-size: 0.9rem;
+    }
+    .prereqs {
+      font-size: 0.8rem;
+      color: #71717a;
+      margin-bottom: 1.5rem;
+    }
+    .links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+    .links a {
+      color: #a1a1aa;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.15s;
+    }
+    .links a:hover { color: #fafafa; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Agento</h1>
+    <p class="subtitle">Self-hosted AI agent platform</p>
+
+    <div class="install-box">
+      <div class="install-label">Install</div>
+      <div class="install-cmd">
+        <code>curl -fsSL https://get.agento.host/install.sh | bash</code>
+        <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+      </div>
+    </div>
+
+    <div class="steps">
+      <h3>Then run</h3>
+      <div class="step"><span class="step-num">1.</span> <code>agento init</code> <span>— set up admin account</span></div>
+      <div class="step"><span class="step-num">2.</span> <code>agento start</code> <span>— start the platform</span></div>
+      <div class="step"><span class="step-num">3.</span> <code>agento open</code> <span>— open dashboard in browser</span></div>
+    </div>
+
+    <p class="prereqs">Requires Docker Desktop, Node.js 20+, and macOS or Linux.</p>
+
+    <div class="links">
+      <a href="https://github.com/remsyshq/agento-self-hosted">GitHub</a>
+      <a href="https://agento.host">agento.host</a>
+      <a href="https://agento.host/docs/self-hosted">Docs</a>
+    </div>
+  </div>
+
+  <script>
+    function copyCmd(btn) {
+      navigator.clipboard.writeText('curl -fsSL https://get.agento.host/install.sh | bash');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    }
+  </script>
+</body>
+</html>

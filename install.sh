@@ -4,7 +4,7 @@ set -euo pipefail
 # Agento Self-Hosted Installer
 # https://agento.host
 #
-# Usage: curl -fsSL https://get.agento.host | bash
+# Usage: curl -fsSL https://get.agento.host/install.sh | bash
 
 AGENTO_DIR="${AGENTO_DATA_DIR:-$HOME/.agento}"
 AGENTO_VERSION="${AGENTO_VERSION:-master}"

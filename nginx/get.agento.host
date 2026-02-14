@@ -1,5 +1,6 @@
-# get.agento.host — Self-hosted installer script
-# Serves install.sh as plain text
+# get.agento.host — Self-hosted installer landing page + script
+# /            → HTML landing page
+# /install.sh  → raw install script (curl -fsSL ... | bash)
 
 server {
     listen 80;
@@ -28,9 +29,13 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers off;
 
+    root /var/www/agento-self-hosted;
+
     location = / {
-        root /var/www/agento-self-hosted;
-        try_files /install.sh =404;
+        try_files /index.html =404;
+    }
+
+    location = /install.sh {
         default_type text/plain;
         add_header Content-Type "text/plain; charset=utf-8" always;
     }

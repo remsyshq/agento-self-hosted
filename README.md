@@ -5,7 +5,7 @@ Run the full Agento AI agent platform on your own infrastructure.
 ## Quick Start
 
 ```bash
-curl -fsSL https://get.agento.host | bash
+curl -fsSL https://get.agento.host/install.sh | bash
 agento init
 agento start
 agento open
