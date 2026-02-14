@@ -169,6 +169,39 @@ install_agento() {
 
 # ── Create CLI symlink ───────────────────────────────────────────────────────
 
+add_to_path_hint() {
+  local shell_name profile_file export_line
+  shell_name="$(basename "${SHELL:-/bin/bash}")"
+  export_line="export PATH=\"$AGENTO_DIR/bin:\$PATH\""
+
+  case "$shell_name" in
+    zsh)  profile_file="$HOME/.zshrc" ;;
+    bash)
+      if [ "$OS" = "macos" ]; then
+        profile_file="$HOME/.bash_profile"
+      else
+        profile_file="$HOME/.bashrc"
+      fi
+      ;;
+    fish)
+      export_line="fish_add_path $AGENTO_DIR/bin"
+      profile_file="$HOME/.config/fish/config.fish"
+      ;;
+    *)    profile_file="$HOME/.profile" ;;
+  esac
+
+  warn "Could not add agento to /usr/local/bin."
+  echo
+  info "  Add to your $shell_name profile by running:"
+  echo
+  echo -e "    echo '$export_line' >> $profile_file"
+  echo
+  info "  Then restart your terminal or run:"
+  echo
+  echo -e "    source $profile_file"
+  echo
+}
+
 setup_cli() {
   info "Setting up CLI..."
 
@@ -191,11 +224,13 @@ SCRIPT
     ok "CLI installed: agento"
   elif command -v sudo &>/dev/null; then
     info "Need sudo to create /usr/local/bin/agento symlink..."
-    sudo ln -sf "$WRAPPER" /usr/local/bin/agento
-    ok "CLI installed: agento"
+    if sudo ln -sf "$WRAPPER" /usr/local/bin/agento 2>/dev/null; then
+      ok "CLI installed: agento"
+    else
+      add_to_path_hint
+    fi
   else
-    warn "Cannot write to /usr/local/bin. Add to PATH manually:"
-    info "  export PATH=\"$AGENTO_DIR/bin:\$PATH\""
+    add_to_path_hint
   fi
 }
 
