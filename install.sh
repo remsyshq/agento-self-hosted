@@ -10,6 +10,18 @@ AGENTO_DIR="${AGENTO_DATA_DIR:-$HOME/.agento}"
 AGENTO_VERSION="${AGENTO_VERSION:-master}"
 AGENTO_REPO="https://github.com/remsyshq/agento-self-hosted.git"
 
+# ── Ensure PATH includes common tool locations ──────────────────────────────
+# When piped via curl|bash, the shell is non-interactive and may not source
+# .bashrc/.zshrc, so Homebrew, nvm, etc. paths can be missing.
+
+for p in /opt/homebrew/bin /usr/local/bin /home/linuxbrew/.linuxbrew/bin; do
+  [ -d "$p" ] && case ":$PATH:" in *":$p:"*) ;; *) export PATH="$p:$PATH" ;; esac
+done
+
+# Source nvm if available (common Node.js version manager)
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" 2>/dev/null
+
 # ── Colors ───────────────────────────────────────────────────────────────────
 
 RED='\033[0;31m'
