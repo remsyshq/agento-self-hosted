@@ -1,21 +1,45 @@
+# get.agento.host — Self-hosted installer script
+# Serves install.sh as plain text
+
 server {
     listen 80;
+    listen [::]:80;
     server_name get.agento.host;
 
-    # Cloudflare handles SSL termination
-
-    location = / {
-        alias /var/www/agento-self-hosted/install.sh;
-        default_type text/plain;
-        add_header Content-Type "text/plain; charset=utf-8";
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
     }
 
-    location /health {
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name get.agento.host;
+
+    ssl_certificate /etc/letsencrypt/live/get.agento.host/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/get.agento.host/privkey.pem;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    location = / {
+        root /var/www/agento-self-hosted;
+        try_files /install.sh =404;
+        default_type text/plain;
+        add_header Content-Type "text/plain; charset=utf-8" always;
+    }
+
+    location = /health {
         return 200 'ok';
         add_header Content-Type text/plain;
     }
 
-    # Block everything else
     location / {
         return 404;
     }
